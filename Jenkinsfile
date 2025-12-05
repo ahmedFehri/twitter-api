@@ -23,6 +23,19 @@ node {
 		}
 	}
 
+
+	stage('Sonar') {
+		 withSonarQubeEnv('Sonar') {
+	            withMaven(maven: 'maven') {
+			if(isUnix()) {
+				sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=org.springdoc:spring-boot-webmvc-af" 
+			} else { 
+				bat "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=org.springdoc:spring-boot-webmvc-af" 
+			} 
+		    } 
+		}
+	}
+
 	stage('Package') {
 		withMaven(maven: 'maven') {
 			if(isUnix()) {
@@ -43,16 +56,6 @@ node {
 		}
 	}
 
-	 stage('Sonar') {
-		 withSonarQubeEnv('Sonar') {
-	            withMaven(maven: 'maven') {
-			if(isUnix()) {
-				sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=org.springdoc:spring-boot-webmvc-af" 
-			} else { 
-				bat "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=org.springdoc:spring-boot-webmvc-af" 
-			} 
-		    } 
-		}
-	}
+	 
 
 }
